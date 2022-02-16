@@ -1,121 +1,86 @@
 var SUITE = 'H D S C'.split(' ');
 var RANKS = '2 3 4 5 6 7 8 9 10 J Q K A'.split(' ');
-
-function product(SUITE,RANKS){
-    var arr=[];
+var deck1,deck2;
+var active1,active2;
+function product(){
+    var temp=[];
     for(var i=0;i<SUITE.length;i++){
         for(var j=0;j<RANKS.length;j++){
-            arr.push(SUITE[i]+RANKS[j]);
+            temp.push(SUITE[i]+RANKS[j]);
         }
     }
-    return arr;
+    return temp;
 }
-
-class Deck{
-    constructor(){
-        this.deck=product(SUITE,RANKS);
-    }
-    shuffle(){
-        var temp;
-        for(var i=0;i<this.deck.length;i++){
-            var j=Math.floor(Math.random*50);
-            temp=this.deck[i];
-            this.deck[i]=this.deck[j];
-            this.deck[j]=temp;
-        }   
-    }
-    split_in_half(order=0){
-        return (order)?this.deck[0,26]:this.deck[26,52];
+function shuffle(arr){
+    var i,j,temp;
+    for(i=0;i<arr.length;i++){
+        j=Math.floor(Math.random()*arr.length);
+        temp=arr[i];
+        arr[i]=arr[j];
+        arr[j]=temp;
     }
 }
-
-class Hand{
-    constructor(cards){
-        this.cards=cards;
-    }
-    add_cards(card_arr){
-        this.cards=this.cards+card_arr;
-    }
-    get_card(){
-        var temp=this.cards[0];
-        this.cards=this.cards(1,);
-        return temp;
-    }
-    get_war_cards(){
-        if(this.cards.length<3){
-            return this.cards;
-        }else{
-            var arr=[];
-            var temp;
-            for(var i=0;i<3;i++){
-                temp=this.cards[0];
-                this.cards=this.cards(1,);
-                arr.push(temp);
-            }
-            return arr;
-        }
-    }
+function get_card(dec,act){
+    act.push(dec[0]);
+    dec=dec.slice(1,dec.length);
 }
-
-class Player{
-    constructor(name,hand){
-        this.name=name;
-        this.hand=hand;
-        this.active=[];
-    }
-    pick_card(war=0){
-        if(war){
-            this.active=this.active+this.hand.get_war_cards();
-        }else{
-            this.active.push(this.hand.get_card());
-        }
-    }
-    keep_cards(arr){
-        this.hand.add_cards(this.active+arr);
-        this.active=[];
-    }
-    give_cards(){
-        arr=this.active;
-        this.active=[];
-        return arr;
-    }
-    get_rank(){
-        return RANKS.indexOf(this.active[-1][1]);
-    }
-    still_has_cards(){
-        return (this.hand.cards!==undefined)?this.hand.cards.length!=0:1;
-    }
+function still_have_cards(player=0){
+    if(player){ return deck2.length!=0;}
+    else{ return deck1.length!=0;}
 }
 function game(){
-    console.log("---WAR GAME---");
-    var deck=new Deck();
-    // deck.shuffle();
-    console.log("Deck shuffled");
-    console.log(deck.deck);
-    var h1=new Hand(deck.split_in_half());
-    var player=new Player(prompt("Enter name: "),h1);
-    var h2=new Hand(deck.split_in_half(1));
-    var comp=new Player("Computer",h2);
-    console.log("Cards Distributed");
-    while(player.still_has_cards() && comp.still_has_cards()){
-        player.pick_card();
-        comp.pick_card();
-        console.log(player.hand.cards);
-        console.log(comp.hand.cards);
-        if(player.get_rank()==comp.get_rank()){
-            console.log("War Begins");
-            player.pick_card(1);
-            comp.pick_card(1);
-        }else if(player.get_rank()>comp.get_rank()){
-            player.keep_cards(comp.give_cards());
-        }else{
-            comp.keep_cards(player.give_cards());
+    console.log("War Game!");
+    var deck=product();
+    shuffle(deck);
+    deck1=deck.slice(0,26);
+    deck2=deck.slice(26,52);
+    console.log("Decks distributed!");
+    active1=[];
+    active2=[];
+    var count=2000;
+    while(still_have_cards() && still_have_cards(1) && count){
+        active1.push(deck1[0]);
+        setTimeout(function(st){document.querySelector("#table").innerHTML="<img src='asset/"+st+".jpg'>"},1000,deck1[0]);
+        deck1=deck1.slice(1,deck1.length);
+        active2.push(deck2[0]);
+        setTimeout(function(st){document.querySelector("#table").innerHTML="<img src='asset/"+st+".jpg'>"},1000,deck2[0]);
+        deck2=deck2.slice(1,deck2.length);
+        if(RANKS.indexOf(active1[active1.length-1][1])==RANKS.indexOf(active2[active2.length-1][1])){
+            console.log("War Begins!");
+            if(deck1.length<3){
+                active1=active1.concat(deck1);
+            }else{
+                active1.push(deck1[0]);
+                deck1=deck1.slice(1,deck1.length);
+                active1.push(deck1[0]);
+                deck1=deck1.slice(1,deck1.length);
+                active1.push(deck1[0]);
+                deck1=deck1.slice(1,deck1.length);
+            }
+            if(deck2.length<3){
+                active2=active2.concat(deck2);
+            }else{
+                active2.push(deck2[0]);
+                deck2=deck2.slice(1,deck2.length);
+                active2.push(deck2[0]);
+                deck2=deck2.slice(1,deck2.length);
+                active2.push(deck2[0]);
+                deck2=deck2.slice(1,deck2.length);
+            }
         }
+        else{
+            if(RANKS.indexOf(active1[active1.length-1][1])>RANKS.indexOf(active2[active2.length-1][1])){
+                deck1=deck1.concat(active1,active2);
+            }else{
+                deck2=deck2.concat(active1,active2);
+            }
+            active1=[];
+            active2=[];
+        }
+        count=count-1;
     }
-    if(player.still_has_cards()){
-        console.log(player.name+" Won!");
-    }else{
-        console.log(comp.name+" Won!");
-    }
+    if(still_have_cards() && count) console.log("Computer Won!");
+    else if(still_have_cards(1) && count) console.log("Player Won!");
+    else console.log("Draw!");
 }
 game();
