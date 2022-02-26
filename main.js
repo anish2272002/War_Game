@@ -40,10 +40,14 @@ function game(){
     var count=2000;
     while(still_have_cards() && still_have_cards(1) && count){
         active1.push(deck1[0]);
-        setTimeout(function(st){document.querySelector("#table").innerHTML="<img src='asset/"+st+".jpg'>"},1000,deck1[0]);
+        setTimeout(function(st){
+            document.querySelector("#table").innerHTML="<img src='asset/"+st+".jpg'>";
+        },1000,deck1[0]);
         deck1=deck1.slice(1,deck1.length);
         active2.push(deck2[0]);
-        setTimeout(function(st){document.querySelector("#table").innerHTML="<img src='asset/"+st+".jpg'>"},1000,deck2[0]);
+        setTimeout(function(st){
+            document.querySelector("#table").innerHTML="<img src='asset/"+st+".jpg'>";
+        },1000,deck2[0]);
         deck2=deck2.slice(1,deck2.length);
         if(RANKS.indexOf(active1[active1.length-1][1])==RANKS.indexOf(active2[active2.length-1][1])){
             console.log("War Begins!");
