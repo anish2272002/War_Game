@@ -50,6 +50,7 @@ function game(){
     active1=[];
     active2=[];
     var count=2000;
+    var timeCounter = 1;
     while(still_have_cards() && still_have_cards(1) && count){
         active1.push(deck1[0]);
         UpdateMoveView(deck1[0], timeCounter);
