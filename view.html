@@ -11,6 +11,10 @@
     rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" 
     crossorigin="anonymous">
     <style>
+        @keyframes show{
+            from{transform: scale(1.2);box-shadow: 7px 7px 7px 7px rgba(0, 0, 0, 0.2);}
+            to{transform: scale(1);box-shadow: 0px;}
+        }
         @keyframes focus{
             from{transform:translateY(-100%);opacity:0;}
             to{transform:translateY(0%);opacity:1;}
@@ -23,6 +27,9 @@
         }
         @keyframes right{
             to{transform: translateX(50vw);opacity:0;}
+        }
+        .animadrop{
+            animation: show 0.8s 1;
         }
         .animaleft{
             animation: left 0.8s 1 forwards;
@@ -42,6 +49,7 @@
             padding: 1rem;
             font-family: 'Roboto Mono', monospace;
             animation: focus 1s 1 forwards;
+            z-index: 5;
         }
         .cont2{
             position: fixed;
@@ -56,6 +64,7 @@
             color: white;
             background-color: black;
             border-radius: 1rem;
+            z-index: 5;
         }
         body{
             background-color: #008800;
@@ -71,6 +80,17 @@
         #player img:hover{
             transform: scale(1.04);
             cursor: pointer;
+        }
+        .col_md-4{
+            position: relative;
+        }
+        .deck1,.deck2{
+            position:absolute;
+            transform: translate(-96.5%,2.5%);
+            z-index:-2;
+        }
+        .deck2{
+            transform: translate(-93%,5%);
         }
         @media(min-width:800px){
             img{
@@ -107,13 +127,19 @@
     <div class="m-1" style="height:98vh;">
         <div class="row d-flex justify-content-evenly align-items-center" style="height:100%;">
             <div id="computer" class="col-md-4 text-center">
-                <img src="asset/0.jpg">
+                <h3>Computer</h3>
+                <img src="asset/0.jpg" class="animadrop">
+                <img class="deck1" src="asset/0.jpg">
+                <img class="deck2" src="asset/0.jpg">
             </div>
             <div id="table" class="col-md-4 text-center">
                 <img>
             </div>
-            <div id="player" class="col-md-4 text-center">
-                <img src="asset/0.jpg">
+            <div id="player" class="col-md-4 text-center" style="color: white;">
+                <h3>Player</h3>
+                <img src="asset/0.jpg" class="animadrop">
+                <img class="deck1" src="asset/0.jpg">
+                <img class="deck2" src="asset/0.jpg">
             </div>
         </div>
     </div>

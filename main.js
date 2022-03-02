@@ -3,6 +3,8 @@ let RANKS = '6 7 8 9 10 J Q K A'.split(' ');    //deck shortend for short game
 let deck1,deck2;
 let active1,active2;
 let count=200;
+const comp=document.querySelector("#computer");
+const player=document.querySelector("#player");
 
 function product(){
     let temp=[];
@@ -27,7 +29,7 @@ function get_card(){
     showCard(deck2[0])
     deck2 = deck2.slice(1, deck2.length);
     active1.push(deck1[0]);
-    setTimeout(showCard,1300,deck1[0]);
+    setTimeout(showCard,1000,deck1[0]);
     deck1 = deck1.slice(1, deck1.length);
 }
 function get_war_card(player=0){
@@ -58,9 +60,17 @@ function still_have_cards(player=0){
 function showCard(img){
     const demo=document.createElement("img");
     demo.src="asset/"+img+".jpg";
+    if(player.style.color=="black" || img=="0"){
+        comp.style.color="black";
+        player.style.color="white";
+    }else{
+        comp.style.color="white";
+        player.style.color="black";
+    }
     demo.addEventListener("load",()=>{
         let container=document.querySelector("#table");
         container.replaceChild(demo,container.firstElementChild);
+        container.firstElementChild.classList="animadrop";
     })
 }
 function game(){
@@ -71,8 +81,7 @@ function game(){
         setTimeout(showCard,900,"0");
         show("War");
         setTimeout(deshow,1000);
-    }
-    else{
+    }else{
         if(RANKS.indexOf(active1[active1.length-1][1])>RANKS.indexOf(active2[active2.length-1][1])){
             deck1=deck1.concat(active1,active2);
             document.querySelector("#table").firstChild.classList="animaleft";
@@ -80,10 +89,10 @@ function game(){
             deck2=deck2.concat(active1,active2);
             document.querySelector("#table").firstChild.classList="animaright";
         }
-        
         active1=[];
         active2=[];
     }
+    document.querySelector("#player").addEventListener("click",click);
     count=count-1;
 }
 function main(){
@@ -98,6 +107,7 @@ function main(){
     document.querySelector("#player").addEventListener("click",click);
 }
 function click(){
+    document.querySelector("#player").removeEventListener("click",click);
     if(still_have_cards() && still_have_cards(1) && count){
         empty();
         setTimeout(get_card,500);
@@ -113,7 +123,6 @@ function click(){
             console.log("Draw!");
             show("Draw!");
         }
-        document.querySelector("#player").removeEventListener("click",click);
     }
 }
 function show(text){
