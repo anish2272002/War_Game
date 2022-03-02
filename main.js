@@ -31,6 +31,7 @@ function get_card(){
     active1.push(deck1[0]);
     setTimeout(showCard,1000,deck1[0]);
     deck1 = deck1.slice(1, deck1.length);
+    setTimeout(game,2000);
 }
 function get_war_card(player=0){
     if(player){
@@ -111,7 +112,6 @@ function click(){
     if(still_have_cards() && still_have_cards(1) && count){
         empty();
         setTimeout(get_card,500);
-        setTimeout(game,2000);
     }else{
         if(still_have_cards() && count){
             console.log("Computer Won!");
