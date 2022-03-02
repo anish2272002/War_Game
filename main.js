@@ -31,7 +31,7 @@ function get_card(){
     active1.push(deck1[0]);
     setTimeout(showCard,1200,deck1[0]);
     deck1 = deck1.slice(1, deck1.length);
-    setTimeout(game,3500);
+    setTimeout(game,3300);
 }
 function get_war_card(player=0){
     if(player){
