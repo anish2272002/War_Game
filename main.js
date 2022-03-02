@@ -110,7 +110,7 @@ function click(){
     document.querySelector("#player").removeEventListener("click",click);
     if(still_have_cards() && still_have_cards(1) && count){
         empty();
-        setTimeout(get_card,300);
+        setTimeout(get_card,500);
         setTimeout(game,2000);
     }else{
         if(still_have_cards() && count){
